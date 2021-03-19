@@ -1,3 +1,4 @@
+using API.Helpers;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,8 @@ namespace API
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddScoped<IProductRepository, ProductRepository>();
+      services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+      services.AddAutoMapper(typeof(MappingProfiles));
       services.AddControllers();
       services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "API", Version = "v1"}); });
       services.AddDbContext<StoreContext>(
@@ -43,6 +46,8 @@ namespace API
       // app.UseHttpsRedirection();
 
       app.UseRouting();
+
+      app.UseStaticFiles();
 
       app.UseAuthorization();
 
